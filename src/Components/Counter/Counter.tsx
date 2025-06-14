@@ -1,8 +1,11 @@
 import './Counter.css'
-import {useEffect, useState} from "react";
+import {Message} from "../Message/Message";
+import {useDispatch, useSelector} from "react-redux";
+import {CounterState} from "../../slices/counterSlice";
+import {decrement, increment} from "../../actions/counterActions";
 
-export function Counter(props: any) {
-    const [count, setCount] = useState(0);
+export function Counter() {
+    /*const [count, setCount] = useState(0);
 
     useEffect(() => {
         alert("ComponentDidMount: " +
@@ -28,16 +31,30 @@ export function Counter(props: any) {
         setCount((prevCount) => prevCount - 1);
     }
 
+    const [state, dispatch] = useReducer(counterReducer, {
+        count: 0,
+        error: null
+    });*/
+
+    const dispatch = useDispatch();
+
+    const count = useSelector((state: CounterState) => state.count);
+    const error = useSelector((state: CounterState) => state.error);
+
     return (
         <div className="counter">
             <h1>React Counter (Functional Components)</h1>
-            <h2>Count:{count}</h2>
+            <h2>Count: {count}</h2>
+            {error && <p className="error">{error}</p>}
             <div>
                 <button className="button"
-                onClick={increment}>+</button>
+                        onClick={() => dispatch(increment())}> +
+                </button>
                 <button className="button"
-                onClick={decrement}>-</button>
+                        onClick={() => dispatch(decrement())}> -
+                </button>
             </div>
+            <Message/>
         </div>
     );
 }
