@@ -1,58 +1,24 @@
-import './Counter.css'
+import './Counter.css';
 import {Message} from "../Message/Message";
 import {useDispatch, useSelector} from "react-redux";
-import {CounterState} from "../../slices/counterSlice";
-import {decrement, increment} from "../../actions/counterActions";
+import {decrement, increment, incrementAsync} from "../../slices/counterSlice";
+import {AppDispatch, RootState} from "../../store/store";
 
 export function Counter() {
-    /*const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        alert("ComponentDidMount: " +
-            "Component has been mounted! Props: " + props.data)
-
-        return () => {
-            alert("ComponentWillUnmount: " +
-                "Component is being removed!")
-        }
-
-    }, []); //Run only once
-
-    useEffect(() => {
-        alert("ComponentDidUpdate: " +
-        "Count has been updated! ")
-    }, [count]); // Run each time when count changes
-
-    const increment = () => {
-        setCount((prevCount) => prevCount + 1);
-    }
-
-    const decrement = () => {
-        setCount((prevCount) => prevCount - 1);
-    }
-
-    const [state, dispatch] = useReducer(counterReducer, {
-        count: 0,
-        error: null
-    });*/
-
-    const dispatch = useDispatch();
-
-    const count = useSelector((state: CounterState) => state.count);
-    const error = useSelector((state: CounterState) => state.error);
-
+    const dispatch = useDispatch<AppDispatch>();
+    // const count = useSelector((state: CounterState) => state.count);
+    // const error = useSelector((state: CounterState) => state.error);
+    const {count, error} = useSelector((state: RootState) => state.counter); // Now you can update like this to catch the count and error
     return (
         <div className="counter">
-            <h1>React Counter (Functional Components)</h1>
+            <h1>React Counter (Using useReducer())</h1>
             <h2>Count: {count}</h2>
-            {error && <p className="error">{error}</p>}
+            {error && <span className="error">
+                {error}</span>}
             <div>
-                <button className="button"
-                        onClick={() => dispatch(increment())}> +
-                </button>
-                <button className="button"
-                        onClick={() => dispatch(decrement())}> -
-                </button>
+                <button className="button" onClick={()=> dispatch(increment())}>+</button>
+                <button className="button" onClick={()=> dispatch(decrement())}>-</button>
+                <button className="button" onClick={()=> dispatch(incrementAsync(1))}>Async Add 1 </button>
             </div>
             <Message/>
         </div>
